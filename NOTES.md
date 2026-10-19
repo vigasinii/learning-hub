@@ -2,7 +2,7 @@
 
 ## Time spent
 
-About 4–5 hours, including reviewing the code and preparing for the interview.
+About 4–5 hours, including reviewing the code.
 
 ## Tools and AI assistance
 
