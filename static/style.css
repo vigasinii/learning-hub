@@ -159,11 +159,12 @@ main { flex: 1; width: 100%; max-width: 1120px; margin: 0 auto; padding: 2rem 1.
 .course-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.85rem 1.25rem; border-top: 1px solid var(--border); }
 .course-card-footer form { margin: 0; }
 
-.toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: stretch; margin-bottom: 1.25rem; }
 .toolbar .search { flex: 1; min-width: 12rem; max-width: 26rem; }
-.search { position: relative; }
-.search .icon { position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%); color: var(--muted); }
-.search input { padding-left: 2.5rem; }
+.toolbar .btn { align-self: stretch; }
+.search { position: relative; display: flex; align-items: center; }
+.search .icon { position: absolute; left: 0.85rem; color: var(--muted); pointer-events: none; }
+.search input { padding-left: 2.5rem; width: 100%; }
 
 .field { margin: 0 0 1.1rem; border: 0; padding: 0; min-width: 0; }
 .field > label, .field > legend { display: block; font-weight: 600; font-size: 0.925rem; margin-bottom: 0.35rem; padding: 0; }
