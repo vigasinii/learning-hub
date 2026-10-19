@@ -4,7 +4,7 @@
   {% csrf_token %}
   <span class="icon-circle">{% include "components/icon.html" with name="trash" %}</span>
   <h1>Delete this {{ kind }}?</h1>
-  <p>You are about to delete <strong>{{ object }}</strong>. This cannot be undone{% if kind == "course" %} and it also removes the course's lessons, quiz, enrolments and progress{% endif %}.</p>
+  <p>You are about to delete <strong>{{ object }}</strong>. This cannot be undone{% if kind == "course" %} and it also removes the course's lessons, quiz, enrollments and progress{% endif %}.</p>
   <div class="form-actions">
     <button class="btn btn-danger" type="submit">Yes, delete {{ kind }}</button>
     <a class="btn btn-secondary" href="{{ cancel_url }}">Keep it</a>

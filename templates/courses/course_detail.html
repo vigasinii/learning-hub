@@ -50,7 +50,7 @@
         {% if enrollment %}
           <a class="btn btn-secondary" href="{% url 'take_quiz' course.pk %}">{% include "components/icon.html" with name="quiz" %}Take the quiz</a>
         {% else %}
-          <p class="muted">Enrol in this course to take the quiz.</p>
+          <p class="muted">Enroll in this course to take the quiz.</p>
         {% endif %}
       </section>
     {% endif %}
@@ -72,11 +72,11 @@
       </div>
     {% elif user.is_learner %}
       <h2>Ready to start?</h2>
-      <p class="muted">Enrol to unlock the lessons and track your progress.</p>
-      <form method="post" action="{% url 'enroll' course.pk %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Enrol in this course</button></form>
+      <p class="muted">Enroll to unlock the lessons and track your progress.</p>
+      <form method="post" action="{% url 'enroll' course.pk %}">{% csrf_token %}<button class="btn btn-primary" type="submit">Enroll in this course</button></form>
     {% else %}
       <h2>Instructor preview</h2>
-      <p class="muted">Only learners can enrol in courses.</p>
+      <p class="muted">Only learners can enroll in courses.</p>
     {% endif %}
   </aside>
 </div>

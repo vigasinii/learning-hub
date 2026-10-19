@@ -64,6 +64,6 @@
     {% include "components/empty_state.html" with icon="search" title="No learners match your search" text="Check the spelling or clear the search." action_url=request.path action_label="Show all learners" %}
   {% endif %}
 {% else %}
-  {% include "components/empty_state.html" with icon="users" title="No learners have enrolled yet" text="Learners appear here after they enrol in this course." %}
+  {% include "components/empty_state.html" with icon="users" title="No learners have enrolled yet" text="Learners appear here after they enroll in this course." %}
 {% endif %}
 {% endblock %}

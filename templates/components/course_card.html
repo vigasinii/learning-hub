@@ -12,7 +12,7 @@
     {% if course.pk in enrolled_ids %}
       <a class="btn btn-secondary btn-sm" href="{% url 'course_detail' course.pk %}">Continue{% include "components/icon.html" with name="arrow-right" %}</a>
     {% elif user.is_learner %}
-      <form method="post" action="{% url 'enroll' course.pk %}">{% csrf_token %}<button class="btn btn-primary btn-sm" type="submit">Enrol</button></form>
+      <form method="post" action="{% url 'enroll' course.pk %}">{% csrf_token %}<button class="btn btn-primary btn-sm" type="submit">Enroll</button></form>
     {% else %}
       <a class="btn btn-secondary btn-sm" href="{% url 'course_detail' course.pk %}">View course</a>
     {% endif %}
