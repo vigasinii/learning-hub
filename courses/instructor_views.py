@@ -13,7 +13,6 @@ from .services import progress_percent
 
 
 def _own_course_or_404(request, pk):
-    """Return the course if the user owns it. Another instructor's course is a 404, not a 403."""
     return get_object_or_404(Course, pk=pk, instructor=request.user)
 
 
@@ -244,7 +243,6 @@ def dashboard(request, pk):
 
 
 def _csv_safe(value):
-    """Stop spreadsheet formula injection from user-controlled text."""
     text = str(value)
     return "'" + text if text[:1] in ("=", "+", "-", "@") else text
 

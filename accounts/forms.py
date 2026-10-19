@@ -4,8 +4,6 @@ from .models import User
 
 
 class SignUpForm(UserCreationForm):
-    """Public sign up always creates a learner; the role is never read from user input."""
-
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("username",)

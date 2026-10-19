@@ -19,11 +19,6 @@ class User(AbstractUser):
         return self.role == self.Role.LEARNER
 
     def clean(self):
-        """An instructor who still owns courses cannot become a learner.
-
-        The admin bulk action uses queryset.update(), which skips clean(), so
-        LMSUserAdmin.make_learner applies the same rule itself.
-        """
         super().clean()
         if self.pk and self.role == self.Role.LEARNER and self.owns_courses():
             raise ValidationError(
