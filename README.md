@@ -1,4 +1,4 @@
-# PUCAR LMS
+# Learning Hub
 
 A small learning management system built with Django for the PUCAR coding challenge. Instructors write and publish courses (lessons plus a multiple choice quiz) and see how learners are doing. Learners browse published courses, enrol, complete lessons and take quizzes.
 

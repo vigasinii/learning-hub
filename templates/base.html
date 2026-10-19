@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Learning Hub{% endblock %} | PUCAR LMS</title>
+  <title>{% block title %}Learning Hub{% endblock %} | Learning Hub</title>
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <script src="{% static 'app.js' %}" defer></script>
 </head>
@@ -11,7 +11,7 @@
 <a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">{% include "components/icon.html" with name="book" %}</span><span>PUCAR LMS</span></a>
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">{% include "components/icon.html" with name="book" %}</span><span>Learning Hub</span></a>
     {% if user.is_authenticated %}
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>{% include "components/icon.html" with name="menu" %}<span class="sr-only">Toggle navigation</span></button>
       <nav id="site-nav" class="site-nav" aria-label="Main">
@@ -45,6 +45,6 @@
   {% endif %}
   {% block content %}{% endblock %}
 </main>
-<footer class="site-footer"><div class="container">PUCAR LMS</div></footer>
+<footer class="site-footer"><div class="container">Learning Hub</div></footer>
 </body>
 </html>
