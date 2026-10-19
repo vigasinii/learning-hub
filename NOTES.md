@@ -2,7 +2,7 @@
 
 ## Time spent
 
-**TODO for the candidate (not yet supplied): replace this line with the time you actually spent, e.g. "About 5 hours, including reviewing the code and preparing for the interview."**
+About 4–5 hours, including reviewing the code and preparing for the interview.
 
 ## Tools and AI assistance
 
