@@ -4,10 +4,42 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Learning Hub{% endblock %} | Learning Hub</title>
+  <style>
+    #wake-overlay{position:fixed;inset:0;z-index:9999;background:#0f172a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;transition:opacity .35s ease}
+    #wake-overlay.wake-done{opacity:0;pointer-events:none}
+    .wake-logo{color:#fff;font-size:1.1rem;font-weight:700;letter-spacing:-.01em;font-family:system-ui,sans-serif}
+    .wake-track{width:220px;height:4px;background:rgba(255,255,255,.12);border-radius:2px;overflow:hidden}
+    .wake-fill{height:100%;width:0;background:#7c6fe0;border-radius:2px;transition:width .15s ease}
+    .wake-fill.wake-anim{animation:wake-progress 4s cubic-bezier(.4,0,.2,1) forwards}
+    @keyframes wake-progress{0%{width:0}50%{width:65%}80%{width:85%}100%{width:93%}}
+    .wake-msg{color:rgba(255,255,255,.5);font-size:.8rem;font-family:system-ui,sans-serif}
+  </style>
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <script src="{% static 'app.js' %}" defer></script>
 </head>
 <body>
+<div id="wake-overlay" role="status" aria-live="polite" aria-label="Loading">
+  <div class="wake-logo">Learning Hub</div>
+  <div class="wake-track"><div class="wake-fill" id="wake-fill"></div></div>
+  <div class="wake-msg" id="wake-msg">Loading…</div>
+</div>
+<script>
+(function(){
+  var overlay=document.getElementById('wake-overlay');
+  var fill=document.getElementById('wake-fill');
+  var msg=document.getElementById('wake-msg');
+  var nav=performance.getEntriesByType&&performance.getEntriesByType('navigation')[0];
+  var slow=nav&&nav.responseStart>3000;
+  if(slow){msg.textContent='Server was sleeping — warming up…';}
+  fill.classList.add('wake-anim');
+  function done(){
+    fill.style.width='100%';
+    fill.classList.remove('wake-anim');
+    setTimeout(function(){overlay.classList.add('wake-done');setTimeout(function(){overlay.remove();},400);},120);
+  }
+  if(document.readyState==='complete'){done();}else{window.addEventListener('load',done);}
+})();
+</script>
 <a class="skip-link" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="container header-inner">
