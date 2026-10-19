@@ -1,0 +1,6 @@
+<div class="empty">
+  <span class="empty-icon">{% include "components/icon.html" with name=icon|default:"book" %}</span>
+  <h2>{{ title }}</h2>
+  {% if text %}<p>{{ text }}</p>{% endif %}
+  {% if action_url %}<a class="btn btn-primary" href="{{ action_url }}">{{ action_label }}</a>{% endif %}
+</div>

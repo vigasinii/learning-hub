@@ -1,0 +1,69 @@
+{% extends "base.html" %}{% block title %}Dashboard{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'manage_course' course.pk %}">{% include "components/icon.html" with name="arrow-left" %}{{ course.title }}</a>
+<div class="page-head">
+  <div>
+    <h1>Learner dashboard</h1>
+    <p class="lead">{{ course.title }}</p>
+  </div>
+  <a class="btn btn-secondary btn-sm" href="{% url 'dashboard_csv' course.pk %}">{% include "components/icon.html" with name="download" %}Export CSV</a>
+</div>
+
+<div class="stats">
+  <div class="card stat">
+    <div class="stat-label">{% include "components/icon.html" with name="users" %}Enrolled learners</div>
+    <div class="stat-value">{{ summary.learners }}</div>
+  </div>
+  <div class="card stat">
+    <div class="stat-label">{% include "components/icon.html" with name="check-circle" %}Finished all lessons</div>
+    <div class="stat-value">{{ summary.finished }}</div>
+    <div class="stat-note">of {{ summary.learners }} ({{ total }} lesson{{ total|pluralize }} in the course)</div>
+  </div>
+  <div class="card stat">
+    <div class="stat-label">{% include "components/icon.html" with name="quiz" %}Passed the quiz</div>
+    {% if quiz %}
+      <div class="stat-value">{{ summary.passed }}</div>
+      <div class="stat-note">of {{ summary.learners }} (pass mark {{ quiz.pass_mark }}%)</div>
+    {% else %}
+      <div class="stat-value">None</div>
+      <div class="stat-note">This course has no quiz</div>
+    {% endif %}
+  </div>
+</div>
+
+{% if summary.learners %}
+  <form method="get" class="toolbar" role="search">
+    <div class="search">
+      {% include "components/icon.html" with name="search" %}
+      <label class="sr-only" for="q">Search learners by username</label>
+      <input id="q" type="text" name="q" value="{{ query }}" placeholder="Search learners">
+    </div>
+    <button class="btn btn-secondary" type="submit">Search</button>
+    {% if query %}<a class="btn btn-ghost" href="{% url 'dashboard' course.pk %}">Clear</a>{% endif %}
+  </form>
+  {% if rows %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Learner</th><th scope="col">Enrolled</th><th scope="col">Lessons done</th><th scope="col">Best quiz score</th></tr></thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td>{{ row.enrollment.learner.username }}</td>
+              <td>{{ row.enrollment.enrolled_at|date:"j M Y" }}</td>
+              <td>
+                {{ row.done }} of {{ total }} ({{ row.percent }}%)
+                {% include "components/progress.html" with percent=row.percent label="Lesson progress" %}
+              </td>
+              <td>{% if row.best_score is None %}<span class="muted">No attempts</span>{% else %}{{ row.best_score }}%{% if row.passed %} <span class="badge badge-success">passed</span>{% endif %}{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {% include "components/empty_state.html" with icon="search" title="No learners match your search" text="Check the spelling or clear the search." action_url=request.path action_label="Show all learners" %}
+  {% endif %}
+{% else %}
+  {% include "components/empty_state.html" with icon="users" title="No learners have enrolled yet" text="Learners appear here after they enrol in this course." %}
+{% endif %}
+{% endblock %}

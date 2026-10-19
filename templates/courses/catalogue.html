@@ -1,0 +1,29 @@
+{% extends "base.html" %}{% block title %}Courses{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Course catalogue</h1>
+    <p class="lead">Browse published courses and enrol to start learning.</p>
+  </div>
+</div>
+<form method="get" class="toolbar" role="search">
+  <div class="search">
+    {% include "components/icon.html" with name="search" %}
+    <label class="sr-only" for="q">Search courses by title</label>
+    <input id="q" type="text" name="q" value="{{ query }}" placeholder="Search courses by title">
+  </div>
+  <button class="btn btn-secondary" type="submit">Search</button>
+  {% if query %}<a class="btn btn-ghost" href="{% url 'home' %}">Clear</a>{% endif %}
+</form>
+{% if courses %}
+  <div class="grid">
+    {% for course in courses %}
+      {% include "components/course_card.html" %}
+    {% endfor %}
+  </div>
+{% elif query %}
+  {% include "components/empty_state.html" with icon="search" title="No courses match your search" text="Try a different word or clear the search to see every published course." action_url=request.path action_label="Show all courses" %}
+{% else %}
+  {% include "components/empty_state.html" with icon="book" title="No published courses yet" text="Courses appear here once an instructor publishes them." %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% block title %}Quiz{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'manage_course' course.pk %}">{% include "components/icon.html" with name="arrow-left" %}{{ course.title }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ quiz.title }}</h1>
+    <p class="lead">Pass mark {{ quiz.pass_mark }}%. The correct answer is marked for you only; learners never see it before submitting.</p>
+  </div>
+  <div class="btn-row">
+    <a class="btn btn-secondary" href="{% url 'quiz_edit' course.pk %}">{% include "components/icon.html" with name="edit" %}Quiz settings</a>
+    <a class="btn btn-primary" href="{% url 'question_create' course.pk %}">{% include "components/icon.html" with name="plus" %}Add question</a>
+  </div>
+</div>
+{% for question in questions %}
+  <article class="card question">
+    <h2><span class="question-number">{{ forloop.counter }}</span>{{ question.text }}</h2>
+    <ul class="option-list">
+      {% for choice in question.choices.all %}
+        <li{% if choice.is_correct %} class="correct"{% endif %}>{% if choice.is_correct %}{% include "components/icon.html" with name="check" %}{% endif %}<span>{{ choice.text }}</span>{% if choice.is_correct %}<span class="sr-only">(correct answer)</span>{% endif %}</li>
+      {% endfor %}
+    </ul>
+    <div class="btn-row">
+      <a class="btn btn-secondary btn-sm" href="{% url 'question_edit' course.pk question.pk %}">Edit</a>
+      <a class="btn btn-danger-outline btn-sm" href="{% url 'question_delete' course.pk question.pk %}">Delete</a>
+    </div>
+  </article>
+{% empty %}
+  {% url 'question_create' course.pk as add_question_url %}
+  {% include "components/empty_state.html" with icon="quiz" title="No questions yet" text="Add multiple choice questions. Each question has exactly one correct answer." action_url=add_question_url action_label="Add question" %}
+{% endfor %}
+{% endblock %}

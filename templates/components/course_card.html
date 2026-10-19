@@ -1,0 +1,20 @@
+<article class="card course-card">
+  <div class="course-card-body">
+    <div class="course-card-top">
+      <span class="meta-item">{% include "components/icon.html" with name="user" %}{{ course.instructor.username }}</span>
+      {% if course.pk in enrolled_ids %}<span class="badge badge-accent">Enrolled</span>{% endif %}
+    </div>
+    <h2><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></h2>
+    <p>{{ course.description|truncatewords:28 }}</p>
+  </div>
+  <div class="course-card-footer">
+    <span class="meta-item">{% include "components/icon.html" with name="book" %}{{ course.lesson_count }} lesson{{ course.lesson_count|pluralize }}</span>
+    {% if course.pk in enrolled_ids %}
+      <a class="btn btn-secondary btn-sm" href="{% url 'course_detail' course.pk %}">Continue{% include "components/icon.html" with name="arrow-right" %}</a>
+    {% elif user.is_learner %}
+      <form method="post" action="{% url 'enroll' course.pk %}">{% csrf_token %}<button class="btn btn-primary btn-sm" type="submit">Enrol</button></form>
+    {% else %}
+      <a class="btn btn-secondary btn-sm" href="{% url 'course_detail' course.pk %}">View course</a>
+    {% endif %}
+  </div>
+</article>

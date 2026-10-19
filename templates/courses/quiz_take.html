@@ -1,0 +1,35 @@
+{% extends "base.html" %}{% block title %}{{ quiz.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'course_detail' course.pk %}">{% include "components/icon.html" with name="arrow-left" %}{{ course.title }}</a>
+<div class="page-head">
+  <div>
+    <h1>{{ quiz.title }}</h1>
+    <p class="lead">Answer every question, then submit to see your score.</p>
+  </div>
+</div>
+<section class="card" style="margin-bottom: 1.25rem">
+  <ul class="info-list">
+    <li><strong>{{ questions|length }}</strong><span>question{{ questions|length|pluralize }}</span></li>
+    <li><strong>{{ quiz.pass_mark }}%</strong><span>to pass</span></li>
+    <li><strong>{{ attempt_count }}</strong><span>previous attempt{{ attempt_count|pluralize }}</span></li>
+  </ul>
+  <p class="muted" style="margin: 0.75rem 0 0">You can retake the quiz as often as you like and every attempt is saved.</p>
+</section>
+<form method="post">
+  {% csrf_token %}
+  {% for question in questions %}
+    <fieldset class="card question">
+      <legend><span class="question-number">{{ forloop.counter }}</span>{{ question.text }}</legend>
+      <div class="choice-list">
+        {% for choice in question.choices.all %}
+          <label class="choice" for="choice-{{ choice.id }}"><input type="radio" id="choice-{{ choice.id }}" name="question_{{ question.id }}" value="{{ choice.id }}" required><span>{{ choice.text }}</span></label>
+        {% endfor %}
+      </div>
+    </fieldset>
+  {% endfor %}
+  <div class="form-actions" style="border-top: 0">
+    <button class="btn btn-primary" type="submit">Submit answers</button>
+    <a class="btn btn-ghost" href="{% url 'course_detail' course.pk %}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

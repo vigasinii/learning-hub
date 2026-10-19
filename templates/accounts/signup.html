@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% block title %}Sign up{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="card auth-card">
+    <h1>Create your account</h1>
+    <p class="lead">Sign up as a learner to enrol in published courses.</p>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% include "components/form_errors.html" %}
+      {% for field in form %}{% include "components/field.html" %}{% endfor %}
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    </form>
+    <p class="auth-foot">Already registered? <a href="{% url 'login' %}">Log in</a></p>
+  </div>
+</div>
+{% endblock %}

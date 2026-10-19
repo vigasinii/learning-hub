@@ -1,0 +1,3 @@
+{% if widget.is_initial %}<p class="file-current">Current file: <strong>{{ widget.value.name }}</strong></p>
+<label class="check" for="{{ widget.checkbox_id }}"><input type="checkbox" name="{{ widget.checkbox_name }}" id="{{ widget.checkbox_id }}"> Remove current file</label>{% endif %}
+<input type="file" name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %}>

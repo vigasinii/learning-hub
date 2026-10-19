@@ -1,0 +1,54 @@
+{% extends "base.html" %}{% block title %}Teach{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>Your courses</h1>
+    <p class="lead">Create courses, add lessons and quizzes, and follow your learners.</p>
+  </div>
+  <a class="btn btn-primary" href="{% url 'course_create' %}">{% include "components/icon.html" with name="plus" %}New course</a>
+</div>
+
+{% if has_courses %}
+  <form method="get" class="toolbar" role="search">
+    <div class="search">
+      {% include "components/icon.html" with name="search" %}
+      <label class="sr-only" for="q">Search your courses by title</label>
+      <input id="q" type="text" name="q" value="{{ query }}" placeholder="Search your courses">
+    </div>
+    <label class="sr-only" for="status">Filter by status</label>
+    <select id="status" name="status" style="width: auto">
+      <option value="">All statuses</option>
+      {% for value, label in status_choices %}<option value="{{ value }}"{% if value == status %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <button class="btn btn-secondary" type="submit">Apply</button>
+    {% if query or status %}<a class="btn btn-ghost" href="{% url 'instructor_courses' %}">Clear</a>{% endif %}
+  </form>
+
+  {% if courses %}
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th scope="col">Course</th><th scope="col">Status</th><th scope="col">Lessons</th><th scope="col">Learners</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+        <tbody>
+          {% for course in courses %}
+            <tr>
+              <td><a class="table-title" href="{% url 'manage_course' course.pk %}">{{ course.title }}</a></td>
+              <td>{% include "components/status_badge.html" %}</td>
+              <td>{{ course.lesson_count }}</td>
+              <td>{{ course.enrolment_count }}</td>
+              <td class="actions">
+                <a class="btn btn-secondary btn-sm" href="{% url 'manage_course' course.pk %}">Manage</a>
+                <a class="btn btn-ghost btn-sm" href="{% url 'dashboard' course.pk %}">{% include "components/icon.html" with name="dashboard" %}Dashboard</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    {% include "components/empty_state.html" with icon="search" title="No courses match your filters" text="Try a different search or clear the filters." action_url=request.path action_label="Show all courses" %}
+  {% endif %}
+{% else %}
+  {% url 'course_create' as create_url %}
+  {% include "components/empty_state.html" with icon="book" title="You have not created any courses yet" text="Start with a course, then add lessons and a quiz. Learners see it once you publish it." action_url=create_url action_label="Create your first course" %}
+{% endif %}
+{% endblock %}

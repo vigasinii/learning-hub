@@ -1,0 +1,50 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Learning Hub{% endblock %} | PUCAR LMS</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <script src="{% static 'app.js' %}" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">{% include "components/icon.html" with name="book" %}</span><span>PUCAR LMS</span></a>
+    {% if user.is_authenticated %}
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>{% include "components/icon.html" with name="menu" %}<span class="sr-only">Toggle navigation</span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main">
+        <a href="{% url 'home' %}"{% if nav_section == "catalogue" %} class="active" aria-current="page"{% endif %}>Course catalogue</a>
+        {% if user.is_learner %}<a href="{% url 'my_courses' %}"{% if nav_section == "my_courses" %} class="active" aria-current="page"{% endif %}>My courses</a>{% endif %}
+        {% if user.is_instructor %}<a href="{% url 'instructor_courses' %}"{% if nav_section == "teach" %} class="active" aria-current="page"{% endif %}>Teach</a>{% endif %}
+        <div class="nav-user">
+          <span>{{ user.username }}</span>
+          <span class="role-tag">{{ user.get_role_display }}</span>
+          <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-button" type="submit">{% include "components/icon.html" with name="logout" %}Log out</button></form>
+        </div>
+      </nav>
+    {% else %}
+      <nav class="site-nav" aria-label="Account">
+        <a href="{% url 'login' %}">Log in</a>
+        <a href="{% url 'signup' %}">Sign up</a>
+      </nav>
+    {% endif %}
+  </div>
+</header>
+<main id="content">
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="alert alert-{{ message.tags|default:'info' }}"{% if message.tags == "error" %} role="alert"{% else %} role="status"{% endif %}>
+          {% if message.tags == "success" %}{% include "components/icon.html" with name="check-circle" %}{% elif message.tags == "error" %}{% include "components/icon.html" with name="alert" %}{% else %}{% include "components/icon.html" with name="info" %}{% endif %}
+          <p>{{ message }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="site-footer"><div class="container">PUCAR LMS</div></footer>
+</body>
+</html>

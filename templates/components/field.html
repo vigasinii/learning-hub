@@ -1,0 +1,23 @@
+{% if field.widget_type == "radioselect" %}
+<fieldset class="field">
+  <legend>{{ field.label }}</legend>
+  <div class="choice-list">
+    {% for radio in field %}<label class="choice" for="{{ radio.id_for_label }}">{{ radio.tag }}<span>{{ radio.choice_label }}</span></label>{% endfor %}
+  </div>
+  {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+  {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+</fieldset>
+{% elif field.widget_type == "checkbox" %}
+<div class="field">
+  <label class="check" for="{{ field.id_for_label }}">{{ field }} {{ field.label }}</label>
+  {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+  {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+</div>
+{% else %}
+<div class="field{% if field.errors %} has-error{% endif %}">
+  <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="optional">(optional)</span>{% endif %}</label>
+  {{ field }}
+  {% if field.help_text %}<div class="help">{{ field.help_text|safe }}</div>{% endif %}
+  {% for error in field.errors %}<p class="field-error">{% include "components/icon.html" with name="alert" %}<span>{{ error }}</span></p>{% endfor %}
+</div>
+{% endif %}

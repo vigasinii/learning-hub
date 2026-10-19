@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}My courses{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div>
+    <h1>My courses</h1>
+    <p class="lead">Pick up where you left off.</p>
+  </div>
+</div>
+{% if rows %}
+  <div class="grid">
+    {% for enrollment, percent in rows %}
+      <article class="card course-card">
+        <div class="course-card-body">
+          <div class="course-card-top">
+            {% if percent == 100 %}<span class="badge badge-success">Completed</span>{% else %}<span class="badge badge-accent">In progress</span>{% endif %}
+          </div>
+          <h2><a href="{% url 'course_detail' enrollment.course.pk %}">{{ enrollment.course.title }}</a></h2>
+          <p class="muted">{{ enrollment.done_lessons }} of {{ enrollment.total_lessons }} lesson{{ enrollment.total_lessons|pluralize }} done ({{ percent }}%)</p>
+          {% include "components/progress.html" with label="Progress in "|add:enrollment.course.title %}
+        </div>
+        <div class="course-card-footer">
+          <span class="meta-item">Enrolled {{ enrollment.enrolled_at|date:"j M Y" }}</span>
+          <a class="btn btn-primary btn-sm" href="{% url 'course_detail' enrollment.course.pk %}">{% if percent == 100 %}Review{% elif percent %}Continue{% else %}Start{% endif %}{% include "components/icon.html" with name="arrow-right" %}</a>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+{% else %}
+  {% url 'home' as home_url %}
+  {% include "components/empty_state.html" with icon="book" title="You have not enrolled in any courses yet" text="Browse the catalogue to find a course and start learning." action_url=home_url action_label="Browse courses" %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Not found{% endblock %}
+{% block content %}
+{% url 'home' as home_url %}
+{% include "components/empty_state.html" with icon="search" title="Page not found" text="The page you asked for does not exist, or you cannot see it." action_url=home_url action_label="Back to the course catalogue" %}
+{% endblock %}

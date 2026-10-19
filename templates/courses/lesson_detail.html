@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% block title %}{{ lesson.title }}{% endblock %}
+{% block content %}
+<a class="back-link" href="{% url 'course_detail' course.pk %}">{% include "components/icon.html" with name="arrow-left" %}{{ course.title }}</a>
+<div class="lesson-layout">
+  <article class="lesson-body">
+    <p class="muted">Lesson {{ lesson.order }} of {{ total_lessons }}</p>
+    <h1>{{ lesson.title }}</h1>
+    <div class="card"><div class="prose">{{ lesson.content }}</div></div>
+
+    {% if lesson.video_url or lesson.attachment %}
+      <div class="attachment-row">
+        {% if lesson.video_url %}<a class="btn btn-secondary" href="{{ lesson.video_url }}" target="_blank" rel="noopener noreferrer">{% include "components/icon.html" with name="video" %}Watch the video</a>{% endif %}
+        {% if lesson.attachment %}<a class="btn btn-secondary" href="{% url 'lesson_attachment' lesson.pk %}">{% include "components/icon.html" with name="download" %}Download attachment</a>{% endif %}
+      </div>
+    {% endif %}
+
+    <div class="lesson-actions">
+      {% if is_done %}
+        <span class="badge badge-success">{% include "components/icon.html" with name="check" %}Completed</span>
+      {% else %}
+        <form method="post" action="{% url 'complete_lesson' lesson.pk %}">{% csrf_token %}<button class="btn btn-primary" type="submit">{% include "components/icon.html" with name="check" %}Mark as complete</button></form>
+      {% endif %}
+      <div class="btn-row">
+        {% if previous_lesson %}<a class="btn btn-secondary" href="{% url 'lesson_detail' previous_lesson.pk %}">{% include "components/icon.html" with name="arrow-left" %}Previous</a>{% endif %}
+        {% if next_lesson %}
+          <a class="btn btn-secondary" href="{% url 'lesson_detail' next_lesson.pk %}">Next{% include "components/icon.html" with name="arrow-right" %}</a>
+        {% elif quiz %}
+          <a class="btn btn-secondary" href="{% url 'take_quiz' course.pk %}">Take the quiz{% include "components/icon.html" with name="arrow-right" %}</a>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+
+  <aside class="card lesson-sidebar">
+    <h2>Course content</h2>
+    <p class="muted">{{ done_count }} of {{ total_lessons }} lesson{{ total_lessons|pluralize }} done ({{ percent }}%)</p>
+    {% include "components/progress.html" with label="Course progress" %}
+    <ol class="lesson-list" style="margin-top: 0.75rem">
+      {% for item in lessons %}
+        <li>
+          <a class="lesson-link{% if item.pk in done_ids %} done{% endif %}{% if item.pk == lesson.pk %} current{% endif %}" href="{% url 'lesson_detail' item.pk %}"{% if item.pk == lesson.pk %} aria-current="page"{% endif %}>
+            <span class="state">{% if item.pk in done_ids %}{% include "components/icon.html" with name="check-circle" %}{% else %}{% include "components/icon.html" with name="circle" %}{% endif %}</span>
+            <span>{{ item.title }}</span>
+            {% if item.pk in done_ids %}<span class="sr-only">(completed)</span>{% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ol>
+    {% if quiz %}<a class="btn btn-secondary btn-sm" style="margin-top: 0.75rem" href="{% url 'take_quiz' course.pk %}">{% include "components/icon.html" with name="quiz" %}Quiz</a>{% endif %}
+  </aside>
+</div>
+{% endblock %}
